@@ -8,7 +8,7 @@
     "state": "London",
     "country": "GB",
     "phone": "1234567",
-    "email": "John.Doe@gmail.com",
+    "email": "lol.Doe@gmail.com",
     "incorrect_email": "Jn.Doe@gmail.com",
     "correct_password": "JohnDoe1+",
     "incorrect_password": "JohnDoe1+-"
