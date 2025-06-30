@@ -12,9 +12,9 @@ The goal of this project is to test various functionalities of the Paywright MCP
 
 Various UI and API tests will be conducted based on different scenarios
 
-For UI testing, the Practice Software Testing website has been used (Available on:https://practicesoftwaretesting.com/)
+For UI testing, the Practice Software Testing website has been used (Available on: https://practicesoftwaretesting.com/)
 
-For API testing, the Practice Software Testing API has been used (Available on: ttps://github.com/testsmith-io/practice-software-testing)
+For API testing, the Practice Software Testing API has been used (Available on: https://github.com/testsmith-io/practice-software-testing)
 
 ## UI Test Scenarios
 
@@ -55,6 +55,50 @@ The following scenarios have been tested:
    - Add 5+ products to the cart
 
    - Checkout & verify order summary
+
+   ## API Test Scenarios
+
+The following scenarios have been tested:
+
+1. **Authentication**
+
+   - Register a user (POST /users/register)
+
+   - Login a user (POST /users/login)
+
+   - Validate token is returned and can be reused
+
+2. **Product Catalog**
+
+   - Get list of products (GET /products)
+
+   - Get product by ID (GET /products/:id)
+
+   - Search for a Product
+
+3. **Cart Operations**
+
+   - Add item to cart (POST /cart)
+
+   - Get cart (GET /cart)
+
+   - Remove item from cart (DELETE /cart/:itemId)
+
+4. **Order Processing**
+
+   - Place an order (POST /orders)
+
+   - Get order history (GET /orders)
+
+   - Get order by ID (GET /orders/:id)
+
+5. **Negative Testing**
+
+   - Send invalid login credentials
+
+   - Access a protected endpoint with an invalid or missing token
+
+   - Try ordering with an empty cart
 
 ## How to Run
 
