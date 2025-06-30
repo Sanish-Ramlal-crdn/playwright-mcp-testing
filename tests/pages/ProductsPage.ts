@@ -20,4 +20,8 @@ export class ProductsPage {
   async selectProductByName(name: string) {
     await this.page.getByRole("heading", { name }).click();
   }
+
+  async addToCart() {
+    await this.page.getByRole("button", { name: "Add to cart" }).click();
+  }
 }

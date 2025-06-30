@@ -20,7 +20,7 @@ test("Add first product to cart and verify", async ({ page }) => {
   await productsPage.selectProductByName(firstProductName);
 
   // 3. Add the product to the cart
-  await page.getByRole("button", { name: "Add to cart" }).click();
+  await productsPage.addToCart();
 
   // 4. Click on the cart icon
   await cartPage.openCart();
