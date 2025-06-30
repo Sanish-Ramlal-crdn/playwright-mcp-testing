@@ -56,7 +56,7 @@ The following scenarios have been tested:
 
    - Checkout & verify order summary
 
-   ## API Test Scenarios
+## API Test Scenarios
 
 The following scenarios have been tested:
 
