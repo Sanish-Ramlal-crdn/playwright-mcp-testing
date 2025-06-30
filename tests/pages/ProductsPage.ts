@@ -24,4 +24,18 @@ export class ProductsPage {
   async addToCart() {
     await this.page.getByRole("button", { name: "Add to cart" }).click();
   }
+
+  async goToCart() {
+    await this.page.getByRole("link", { name: "cart" }).click();
+  }
+
+  async goToPage(pageNum: number) {
+    await this.page.locator(`a[aria-label="Page-${pageNum}"]`).click();
+  }
+
+  async expectProductAddedAlert() {
+    await this.page
+      .getByRole("alert", { name: "Product added to shopping" })
+      .waitFor({ timeout: 10000 });
+  }
 }

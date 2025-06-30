@@ -67,4 +67,8 @@ export class CheckoutPage {
       .locator(".alert.alert-danger")
       .waitFor({ state: "visible", timeout: 10000 });
   }
+
+  async isLoginButtonVisible() {
+    return this.page.getByRole("button", { name: "Login" }).isVisible();
+  }
 }

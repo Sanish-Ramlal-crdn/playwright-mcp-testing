@@ -83,4 +83,10 @@ export class AuthPage {
     await this.registerPasswordInput.fill(user.correct_password);
     await this.registerButton.click();
   }
+
+  async fillLogin(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
 }

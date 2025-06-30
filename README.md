@@ -8,7 +8,7 @@
 
 ## Project Description
 
-The goal of this project is to test various functionalities of the Paywright MCP server to create tests based on prompts and context.
+The goal of this project is to test various functionalities of the Playwright MCP server to create tests based on prompts and context, while using human intervention as least as possible.
 
 Various UI and API tests will be conducted based on different scenarios
 
