@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { AuthPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 
 const products = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../fixtures/products.json"), "utf-8")
@@ -34,11 +35,8 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
   await page.getByRole("link", { name: "cart" }).click();
 
   // 5. Proceed to Checkout
-  const proceedToCheckoutBtn = page.getByRole("button", {
-    name: "Proceed to checkout",
-  });
-  await proceedToCheckoutBtn.waitFor({ state: "visible", timeout: 10000 });
-  await proceedToCheckoutBtn.click();
+  const checkoutPage = new CheckoutPage(page);
+  await checkoutPage.proceedToCheckout();
 
   // 6. Login or register
   const authPage = new AuthPage(page);
@@ -68,11 +66,7 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
     await expect(page).toHaveURL(urls.account, { timeout: 10000 });
     // After login, go to cart and proceed
     await page.getByRole("link", { name: "cart" }).click();
-    const proceedToCheckoutBtn2 = page.getByRole("button", {
-      name: "Proceed to checkout",
-    });
-    await proceedToCheckoutBtn2.waitFor({ state: "visible", timeout: 10000 });
-    await proceedToCheckoutBtn2.click();
+    await checkoutPage.proceedToCheckout();
     didRegister = true;
   }
 
@@ -84,51 +78,87 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
     await page.getByRole("link", { name: "cart" }).click();
   }
 
-  const proceedToCheckoutBtn3 = page.getByRole("button", {
-    name: "Proceed to checkout",
-  });
-  await proceedToCheckoutBtn3.waitFor({ state: "visible", timeout: 10000 });
-  await proceedToCheckoutBtn3.click();
+  // Proceed through checkout steps (shipping, etc.)
+  await checkoutPage.proceedToCheckout(2);
 
-  // 7. Click on proceed to checkout (shipping)
-  const proceedToCheckoutBtn4 = page.getByRole("button", {
-    name: "Proceed to checkout",
-  });
-  await proceedToCheckoutBtn4.waitFor({ state: "visible", timeout: 10000 });
-  await proceedToCheckoutBtn4.click();
+  // Fill payment details and confirm
+  await checkoutPage.fillPaymentDetails(checkoutData);
 
-  // 9. Select payment type and input payment data, then confirm
-  const paymentTypeSelect = await page.locator(
-    'select[data-test="payment-method"]'
-  );
-  await paymentTypeSelect.waitFor({ state: "visible", timeout: 10000 });
+  // Click confirm until gone
+  await checkoutPage.confirmUntilGone();
 
-  await paymentTypeSelect.selectOption(checkoutData.type);
-  await page.getByLabel("Bank name").fill(checkoutData.bank_name);
-  await page.getByLabel("Account name").fill(checkoutData.account_name);
-  await page
-    .getByLabel("Account number")
-    .fill(checkoutData.valid_account_number);
-  await page.getByRole("button", { name: "Confirm" }).click();
-  // 10. Click confirm until the confirm button is no longer visible
-  let confirmGone = false;
+  // Verify invoice
+  await checkoutPage.verifyInvoiceVisible();
+});
 
-  for (let i = 0; i < 5; i++) {
-    const confirmBtn = page.getByRole("button", { name: "Confirm" });
-    if (!(await confirmBtn.isVisible().catch(() => false))) {
-      confirmGone = true;
-      break;
-    }
-    await page.waitForTimeout(2000); // Wait a bit before next click
-    if (!(await confirmBtn.isVisible().catch(() => false))) {
-      confirmGone = true;
-      break;
-    } else {
-      await confirmBtn.click();
-    }
+test("Checkout flow with invalid payment data shows error", async ({
+  page,
+}) => {
+  const productsPage = new ProductsPage(page);
+  await productsPage.goto();
+
+  // Read first product name from products.json
+  await productsPage.selectProductByName(firstProductName);
+
+  // Add the product to the cart
+  await page.getByRole("button", { name: "Add to cart" }).click();
+
+  // Click on the cart icon
+  await page.getByRole("link", { name: "cart" }).click();
+
+  // Proceed to Checkout
+  const checkoutPage = new CheckoutPage(page);
+  await checkoutPage.proceedToCheckout();
+
+  // Login or register
+  const authPage = new AuthPage(page);
+  await authPage.emailInput.fill(user.email);
+  await authPage.passwordInput.fill(user.correct_password);
+  await authPage.loginButton.click();
+  let didRegister = false;
+  let invalidCreds = false;
+  try {
+    invalidCreds = await authPage.invalidCredentialsText
+      .waitFor({ state: "visible", timeout: 5000 })
+      .then(
+        () => true,
+        () => false
+      );
+  } catch {}
+  if (invalidCreds || (await authPage.isInvalidCredentialsVisible())) {
+    // Register and login
+    await authPage.register(user);
+    await authPage.emailInput.fill(user.email);
+    await authPage.passwordInput.fill(user.correct_password);
+    await authPage.loginButton.click();
+    await expect(page).toHaveURL(urls.account, { timeout: 10000 });
+    // After login, go to cart and proceed
+    await page.getByRole("link", { name: "cart" }).click();
+    await checkoutPage.proceedToCheckout();
+    didRegister = true;
   }
 
-  // 11. Verify invoice number
-  const invoice = page.getByText(/^INV-/);
-  await expect(invoice).toBeVisible({ timeout: 10000 });
+  // After login or registration, go back to cart and proceed if needed
+  if (
+    didRegister ||
+    (await page.getByRole("button", { name: "Login" }).isVisible())
+  ) {
+    await page.getByRole("link", { name: "cart" }).click();
+  }
+
+  // Proceed through checkout steps (shipping, etc.)
+  await checkoutPage.proceedToCheckout(2);
+
+  // Fill incorrect payment details and wait for error (no need to click confirm)
+  const invalidAccountNumber =
+    checkoutData.invalid_account_number || "00000000-";
+  await checkoutPage.fillInvalidAccountNo(
+    checkoutData.type,
+    invalidAccountNumber
+  );
+
+  // Expect an error message to appear (specific selector for the alert-danger class)
+  const errorMsg = page.locator(".alert.alert-danger");
+  await expect(errorMsg).toBeVisible({ timeout: 10000 });
+  await expect(errorMsg).toContainText("Account number must be numeric");
 });
