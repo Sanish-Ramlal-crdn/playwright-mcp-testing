@@ -1,0 +1,15 @@
+{
+    "first_name": "John",
+    "last_name": "Doe",
+    "dob": "2001-01-01",
+    "street": "Abbey Road",
+    "postal_code": "12345",
+    "city": "London",
+    "state": "London",
+    "country": "GB",
+    "phone": "1234567",
+    "email": "John.Doe@gmail.com",
+    "incorrect_email": "Jn.Doe@gmail.com",
+    "correct_password": "JohnDoe1+",
+    "incorrect_password": "JohnDoe1+-"
+}
