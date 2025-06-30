@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 export class CartPage {
   readonly page: Page;
@@ -8,24 +8,24 @@ export class CartPage {
   }
 
   async openCart() {
-    await this.page.getByRole('link', { name: 'cart' }).click();
+    await this.page.getByRole("link", { name: "cart" }).click();
   }
 
   getProductRow(productName: string): Locator {
-    return this.page.getByRole('row', { name: new RegExp(productName, 'i') });
+    return this.page.getByRole("row", { name: new RegExp(productName, "i") });
   }
 
   getProductQuantity(productName: string): Locator {
     const row = this.getProductRow(productName);
-    return row.getByRole('spinbutton', {
-      name: new RegExp('Quantity for ' + productName, 'i'),
+    return row.getByRole("spinbutton", {
+      name: new RegExp("Quantity for " + productName, "i"),
     });
   }
 
   async expectProductVisible(productName: string) {
     const row = this.getProductRow(productName);
     await expect(
-      row.getByRole('cell', { name: new RegExp('^' + productName + '$') })
+      row.getByRole("cell", { name: new RegExp("^" + productName + "$") })
     ).toBeVisible();
   }
 

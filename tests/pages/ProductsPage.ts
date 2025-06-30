@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class ProductsPage {
   readonly page: Page;
@@ -8,10 +8,10 @@ export class ProductsPage {
   }
 
   async goto() {
-    await this.page.goto('https://practicesoftwaretesting.com/');
+    await this.page.goto("https://practicesoftwaretesting.com/");
   }
 
   async selectProductByName(name: string) {
-    await this.page.getByRole('heading', { name }).click();
+    await this.page.getByRole("heading", { name }).click();
   }
 }
