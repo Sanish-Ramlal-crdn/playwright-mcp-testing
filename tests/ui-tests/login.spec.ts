@@ -6,6 +6,9 @@ import { AuthPage } from "../pages/LoginPage.ts";
 const user = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../fixtures/user.json"), "utf-8")
 );
+const urls = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../fixtures/urls.json"), "utf-8")
+);
 
 test("Sign in or register if needed", async ({ page }) => {
   const authPage = new AuthPage(page);
@@ -16,7 +19,7 @@ test("Sign in or register if needed", async ({ page }) => {
     await authPage.register(user);
     await authPage.signIn(user.email, user.correct_password);
   }
-  await expect(page).toHaveURL("https://practicesoftwaretesting.com/account", {
+  await expect(page).toHaveURL(urls.account, {
     timeout: 10000,
   });
 });

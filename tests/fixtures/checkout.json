@@ -1,0 +1,7 @@
+{
+    "type": "bank-transfer",
+    "bank_name": "Test Bank",
+    "account_name": "Test Account",
+    "valid_account_number": "1234567",
+    "invalid_account_number": "1234567-"
+}
