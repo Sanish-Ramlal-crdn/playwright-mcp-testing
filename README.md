@@ -1,4 +1,4 @@
-## Pywright MCP Testing
+## Playwright MCP Testing
 
 <p align="center"><a href="#project-description">Project Description</a> -
 <a href="#ui-test-scenarios">UI Test Scenarios</a> -
@@ -100,7 +100,7 @@ The following scenarios have been tested:
 
    - Try ordering with an empty cart
 
-## How to Run
+## How to Run the tests
 
 Install Node and npm from
 https://nodejs.org/en/download/
