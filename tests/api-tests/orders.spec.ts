@@ -380,4 +380,109 @@ test("Create invoice and fetch by ID", async ({ request }) => {
   expect(getInvoiceBody).toHaveProperty("id", invoiceId);
 });
 
+test("GET all invoices without auth header returns 401", async ({
+  request,
+}) => {
+  // 1. Make a GET request to get all invoices, without any headers
+  const res = await request.get(
+    "https://api.practicesoftwaretesting.com/invoices"
+  );
+  // 2. Verify that the response is 401
+  expect(res.status()).toBe(401);
+});
 
+test("Create invoice for empty cart and verify response", async ({
+  request,
+}) => {
+  // 1. Make a POST request to create a cart and get its ID
+  const createCartRes = await request.post(
+    "https://api.practicesoftwaretesting.com/carts"
+  );
+  expect(createCartRes.status()).toBe(201);
+  const cartBody = await createCartRes.json();
+  const cartId = cartBody.id;
+  expect(cartId).toBeTruthy();
+
+  // 2. Ensure valid token before creating invoice
+  let tokenData;
+  try {
+    tokenData = JSON.parse(
+      fs.readFileSync(
+        path.resolve(__dirname, "../fixtures/token.json"),
+        "utf-8"
+      )
+    );
+  } catch {
+    tokenData = undefined;
+  }
+  let token =
+    tokenData && !isTokenExpired(tokenData) ? tokenData.access_token : null;
+
+  if (!token) {
+    // Try login
+    const user = JSON.parse(
+      fs.readFileSync(
+        path.resolve(__dirname, "../fixtures/apiUser.json"),
+        "utf-8"
+      )
+    );
+    let loginRes = await request.post(
+      "https://api.practicesoftwaretesting.com/users/login",
+      {
+        data: { email: user.email, password: user.password },
+      }
+    );
+    if (loginRes.status() !== 200) {
+      // Register then login
+      await request.post(
+        "https://api.practicesoftwaretesting.com/users/register",
+        { data: user }
+      );
+      loginRes = await request.post(
+        "https://api.practicesoftwaretesting.com/users/login",
+        {
+          data: { email: user.email, password: user.password },
+        }
+      );
+    }
+    expect(loginRes.status()).toBe(200);
+    const loginBody = await loginRes.json();
+    token = loginBody.access_token;
+    // Save new token
+    const expires_in = loginBody.expires_in;
+    const expires_at = expires_in
+      ? new Date(Date.now() + expires_in * 1000).toISOString()
+      : undefined;
+    fs.writeFileSync(
+      path.resolve(__dirname, "../fixtures/token.json"),
+      JSON.stringify(
+        {
+          access_token: token,
+          expires_in,
+          token_type: loginBody.token_type,
+          expires_at,
+        },
+        null,
+        2
+      )
+    );
+  }
+
+  // 3. Make a POST request to create an invoice using checkout.json and the new cart ID
+  const checkoutData = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, "../fixtures/checkout.json"),
+      "utf-8"
+    )
+  );
+  checkoutData.cart_id = cartId;
+  const invoiceRes = await request.post(
+    "https://api.practicesoftwaretesting.com/invoices",
+    {
+      data: checkoutData,
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  // 4. Verify that the response is 200
+  expect(invoiceRes.status()).toBe(422);
+});
