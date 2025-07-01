@@ -10,7 +10,7 @@
 ## Project Description
 
 The goal of this project is to test various functionalities of the Playwright MCP server to create tests based on prompts and context.
-All of the tests created in this project have been created using the Playwright MCP only, in order to fully test its capabilities.
+All of the tests created in this project have been created using the Playwright MCP by leveraging GitHub Copilot with GPT 4.1, in order to fully test its capabilities.
 
 Various UI and API tests have been conducted based on different scenarios
 
@@ -115,7 +115,7 @@ The following scenarios have been tested:
 Install Node and npm from
 https://nodejs.org/en/download/
 
-Ensure that typescript is installed on your machine
+Ensure that typescript is installed on your machine, in case you want to make any modification to the code
 
 ```javascript
 npm install -g typescript

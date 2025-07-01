@@ -49,3 +49,16 @@ test('User login via API', async ({ request }) => {
   );
 });
 
+test('User login fails with incorrect password', async ({ request }) => {
+  const userData = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, '../fixtures/user.json'), 'utf-8')
+  );
+  const response = await request.post('https://api.practicesoftwaretesting.com/users/login', {
+    data: {
+      email: userData.email,
+      password: userData.incorrect_password
+    }
+  });
+  expect(response.status()).toBe(401);
+});
+
