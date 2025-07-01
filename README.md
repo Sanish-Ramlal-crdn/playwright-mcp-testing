@@ -1,6 +1,7 @@
 ## Playwright MCP Testing
 
 <p align="center"><a href="#project-description">Project Description</a> -
+<a href="#about-the-mcp">About the MCP</a> -
 <a href="#ui-test-scenarios">UI Test Scenarios</a> -
 <a href="#api-test-scenarios">API Test Scenarios</a> - 
 <a href="#how-to-run">How To Run</a> 
@@ -16,6 +17,14 @@ Various UI and API tests have been conducted based on different scenarios
 For UI testing, the Practice Software Testing website has been used (Available on: https://practicesoftwaretesting.com/)
 
 For API testing, the Practice Software Testing API has been used (Available on: https://github.com/testsmith-io/practice-software-testing)
+
+## About the MCP
+
+Playwright MCP is a powerful tool designed for browser automation, built on Claude’s Model Context Protocol (MCP). It allows testers to automate browser actions and API calls using plain English commands by making use of LLMs, such as GPT and Claude.
+
+For more information about the MCP installation and how to use it, please refer to the official Playwright MCP GitHub Repo, available on: https://github.com/microsoft/playwright-mcp
+
+I also highly recommend watching this video in order to get a deeper understanding on how to use the Playwright MCP: https://www.youtube.com/watch?v=paSwmp-z9wc
 
 ## UI Test Scenarios
 
@@ -115,7 +124,7 @@ npm install -g typescript
 Clone the repository
 
 ```javascript
-git clone https://github.com/Sanish-Ramlal-crdn/automation-project.git
+git clone https://github.com/Sanish-Ramlal-crdn/playwright-mcp-testing.git
 ```
 
 Once you have installed TypeScript, open the project and install Playwright if it's not already installed by running the below command in the project's root in the terminal
@@ -133,7 +142,7 @@ npx playwright test
 Or you can choose which test file to run
 
 ```javascript
-npx playwright test ./tests/ui/[test_file_name].spec.ts
+npx playwright test ./tests/[folder_name]/[test_file_name]
 ```
 
 You can also select the browser on which to run the tests, else it will run on all 3 browsers by default. For example
