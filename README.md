@@ -8,9 +8,10 @@
 
 ## Project Description
 
-The goal of this project is to test various functionalities of the Playwright MCP server to create tests based on prompts and context, while using human intervention as least as possible.
+The goal of this project is to test various functionalities of the Playwright MCP server to create tests based on prompts and context.
+All of the tests created in this project have been created using the Playwright MCP only, in order to fully test its capabilities.
 
-Various UI and API tests will be conducted based on different scenarios
+Various UI and API tests have been conducted based on different scenarios
 
 For UI testing, the Practice Software Testing website has been used (Available on: https://practicesoftwaretesting.com/)
 
