@@ -34,5 +34,18 @@ test('User login via API', async ({ request }) => {
   const body = await response.json();
   expect(body).toHaveProperty('access_token');
   expect(typeof body.access_token).toBe('string');
+
+  // Store access token and expiry in token.json fixture
+  const tokenData = {
+    access_token: body.access_token,
+    expires_in: body.expires_in,
+    token_type: body.token_type,
+    // Calculate expiry date/time in ISO format if expires_in is present
+    expires_at: body.expires_in ? new Date(Date.now() + body.expires_in * 1000).toISOString() : undefined
+  };
+  fs.writeFileSync(
+    path.resolve(__dirname, '../fixtures/token.json'),
+    JSON.stringify(tokenData, null, 2)
+  );
 });
 
