@@ -22,3 +22,17 @@ test('User registration via API', async ({ request }) => {
     expect(body.email[0]).toMatch(/already exists|already registered/i);
   }
 });
+
+test('User login via API', async ({ request }) => {
+  const response = await request.post('https://api.practicesoftwaretesting.com/users/login', {
+    data: {
+      email: user.email,
+      password: user.password
+    }
+  });
+  expect(response.status()).toBe(200);
+  const body = await response.json();
+  expect(body).toHaveProperty('access_token');
+  expect(typeof body.access_token).toBe('string');
+});
+
