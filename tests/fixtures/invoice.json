@@ -1,0 +1,14 @@
+{
+  "billing_street": "Abbey Road",
+  "billing_city": "London",
+  "billing_state": "London",
+  "billing_country": "UK",
+  "billing_postal_code": "1234A",
+  "payment_method": "bank-transfer",
+  "cart_id": "cart_12345",
+  "payment_details": {
+    "bank_name": "Test Bank",
+    "account_name": "Test Account",
+    "account_number": "12345678"
+  }
+}
