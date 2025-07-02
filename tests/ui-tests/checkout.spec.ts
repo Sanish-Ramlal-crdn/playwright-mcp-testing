@@ -1,24 +1,10 @@
 import { test, expect } from "@playwright/test";
-import fs from "fs";
-import path from "path";
+import { products, user, checkout, urls } from "../config";
 import { AuthPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { InvoicesPage } from "../pages/InvoicesPage";
 import { CartPage } from "../pages/CartPage";
-
-const products = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/products.json"), "utf-8")
-);
-const user = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/user.json"), "utf-8")
-);
-const checkoutData = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/checkout.json"), "utf-8")
-);
-const urls = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/urls.json"), "utf-8")
-);
 
 const firstProductName = products[0].name;
 
@@ -62,7 +48,7 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
     await productsPage.goToCart();
   }
   await checkoutPage.proceedToCheckout(2);
-  await checkoutPage.fillPaymentDetails(checkoutData);
+  await checkoutPage.fillPaymentDetails(checkout);
   await checkoutPage.confirmUntilGone();
   await checkoutPage.verifyInvoiceVisible();
 });
@@ -109,9 +95,9 @@ test("Checkout flow with invalid payment data shows error", async ({
   }
   await checkoutPage.proceedToCheckout(2);
   const invalidAccountNumber =
-    checkoutData.invalid_account_number || "00000000-";
+    checkout.invalid_account_number || "00000000-";
   await checkoutPage.fillInvalidAccountNo(
-    checkoutData.type,
+    checkout.type,
     invalidAccountNumber
   );
   const errorMsg = page.locator(".alert.alert-danger");
@@ -184,7 +170,7 @@ test("Checkout flow with all products, total cost, and invoice verification", as
     await productsPage.goToCart();
   }
   await checkoutPage.proceedToCheckout(2);
-  await checkoutPage.fillPaymentDetails(checkoutData);
+  await checkoutPage.fillPaymentDetails(checkout);
   await checkoutPage.confirmUntilGone();
   const invoiceLocator = checkoutPage.invoiceText;
   await expect(invoiceLocator).toBeVisible({ timeout: 10000 });

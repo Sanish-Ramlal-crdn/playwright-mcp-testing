@@ -1,12 +1,8 @@
 import { test, expect } from "@playwright/test";
-import fs from "fs";
-import path from "path";
+import { products } from "../config";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CartPage } from "../pages/CartPage";
 
-const products = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/products.json"), "utf-8")
-);
 const firstProductName = products[0].name;
 
 test("Add first product to cart and verify", async ({ page }) => {

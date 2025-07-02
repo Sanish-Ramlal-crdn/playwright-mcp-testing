@@ -1,14 +1,6 @@
 import { test, expect } from "@playwright/test";
-import fs from "fs";
-import path from "path";
+import { user, urls } from "../config";
 import { AuthPage } from "../pages/LoginPage.ts";
-
-const user = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/user.json"), "utf-8")
-);
-const urls = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../fixtures/urls.json"), "utf-8")
-);
 
 test("Sign in or register if needed", async ({ page }) => {
   const authPage = new AuthPage(page);
