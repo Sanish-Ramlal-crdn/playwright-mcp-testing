@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-// Helper to load JSON fixture
+// Helper to load JSON fixtures
 function loadFixture<T = any>(relativePath: string): T {
   return JSON.parse(
     fs.readFileSync(path.resolve(__dirname, relativePath), "utf-8")
