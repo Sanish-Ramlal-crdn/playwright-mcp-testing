@@ -133,6 +133,21 @@ Once you have installed TypeScript, open the project and install Playwright if i
 npm init playwright@latest
 ```
 
+Install Monocart reporter if it's not already installed by running the below command in the project's root in the terminal
+
+```javascript
+npm i -D monocart-reporter
+```
+
+After that, add Monocart reporter to the playwright.config.ts in the defineConfig function
+
+```javascript
+  reporter: [
+    ["html", { outputFile: "playwright-report/index.html" }],
+    ["monocart-reporter", { outputFile: "monocart-report/index.html" }],
+  ],
+```
+
 Now, you can run all the tests at once by typing this command on the terminal of your code editor
 
 ```javascript
@@ -163,10 +178,18 @@ npx playwright test --headed
 
 You can view the report after doing a test by running the following command
 
-Report
+Playwright Report
 
 ```javascript
 npx playwright show-report
+```
+
+Alternatively, you can view the Monocart report by running the following command
+
+Monocart Report
+
+```javascript
+npx monocart show-report monocart-report/index.html
 ```
 
 You can also run the tests via the Playwright UI
