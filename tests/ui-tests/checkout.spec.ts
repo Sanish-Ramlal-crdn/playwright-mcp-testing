@@ -5,6 +5,7 @@ import { ProductsPage } from "../pages/ProductsPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { InvoicesPage } from "../pages/InvoicesPage";
 import { CartPage } from "../pages/CartPage";
+import { loginOrRegisterUI } from "../Utils";
 
 const firstProductName = products[0].name;
 
@@ -17,36 +18,8 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
   const checkoutPage = new CheckoutPage(page);
   await checkoutPage.proceedToCheckout();
   const authPage = new AuthPage(page);
-  await authPage.emailInput.fill(user.email);
-  await authPage.passwordInput.fill(user.correct_password);
-  await authPage.loginButton.click();
-  let didRegister = false;
-  let invalidCreds = false;
-  try {
-    invalidCreds = await authPage.invalidCredentialsText
-      .waitFor({ state: "visible", timeout: 5000 })
-      .then(
-        () => true,
-        () => false
-      );
-  } catch {}
-  if (invalidCreds || (await authPage.isInvalidCredentialsVisible())) {
-    console.log("invalid credentials, attempting registration...");
-    await authPage.register(user);
-    await authPage.emailInput.fill(user.email);
-    await authPage.passwordInput.fill(user.correct_password);
-    await authPage.loginButton.click();
-    await expect(page).toHaveURL(urls.account, { timeout: 10000 });
-    await productsPage.goToCart();
-    await checkoutPage.proceedToCheckout();
-    didRegister = true;
-  }
-  if (
-    didRegister ||
-    (await checkoutPage.page.getByRole("button", { name: "Login" }).isVisible())
-  ) {
-    await productsPage.goToCart();
-  }
+  await loginOrRegisterUI(authPage, user, urls, page);
+  await productsPage.goToCart();
   await checkoutPage.proceedToCheckout(2);
   await checkoutPage.fillPaymentDetails(checkout);
   await checkoutPage.confirmUntilGone();
