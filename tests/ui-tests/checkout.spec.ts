@@ -4,7 +4,6 @@ import { AuthPage } from "../pages/LoginPage";
 import { ProductsPage } from "../pages/ProductsPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { InvoicesPage } from "../pages/InvoicesPage";
-import { CartPage } from "../pages/CartPage";
 import { loginOrRegisterUI } from "../Utils";
 
 const firstProductName = products[0].name;
@@ -20,7 +19,7 @@ test("Checkout flow with login/registration and payment", async ({ page }) => {
   const authPage = new AuthPage(page);
   await loginOrRegisterUI(authPage, user, urls, page);
   await productsPage.goToCart();
-  await checkoutPage.proceedToCheckout(2);
+  await checkoutPage.proceedToCheckout(3);
   await checkoutPage.fillPaymentDetails(checkout);
   await checkoutPage.confirmUntilGone();
   await checkoutPage.verifyInvoiceVisible();
@@ -67,12 +66,8 @@ test("Checkout flow with invalid payment data shows error", async ({
     await productsPage.goToCart();
   }
   await checkoutPage.proceedToCheckout(2);
-  const invalidAccountNumber =
-    checkout.invalid_account_number || "00000000-";
-  await checkoutPage.fillInvalidAccountNo(
-    checkout.type,
-    invalidAccountNumber
-  );
+  const invalidAccountNumber = checkout.invalid_account_number || "00000000-";
+  await checkoutPage.fillInvalidAccountNo(checkout.type, invalidAccountNumber);
   const errorMsg = page.locator(".alert.alert-danger");
   await expect(errorMsg).toBeVisible({ timeout: 10000 });
   await expect(errorMsg).toContainText("Account number must be numeric");
