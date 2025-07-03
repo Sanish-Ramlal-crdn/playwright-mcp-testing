@@ -1,4 +1,4 @@
-## Playwright MCP Testing
+## 🎭 Playwright MCP Testing
 
 <p align="center"><a href="#project-description">Project Description</a> -
 <a href="#about-the-mcp">About the MCP</a> -
@@ -6,6 +6,8 @@
 <a href="#api-test-scenarios">API Test Scenarios</a> - 
 <a href="#how-to-run">How To Run</a> 
 </p>
+
+## [Documentation](https://playwright.dev) | [Official Playwright Repo](https://github.com/microsoft/playwright) | [API reference](https://playwright.dev/docs/api/class-playwright) | [Official Playwright MCP Repo](https://github.com/microsoft/playwright-mcp) |
 
 ## Project Description
 
@@ -197,5 +199,3 @@ You can also run the tests via the Playwright UI
 ```javascript
 npx playwright test --ui
 ```
-
-## [Documentation](https://playwright.dev) | [Official Repo](https://github.com/microsoft/playwright) | [API reference](https://playwright.dev/docs/api/class-playwright)
