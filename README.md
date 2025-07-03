@@ -198,7 +198,4 @@ You can also run the tests via the Playwright UI
 npx playwright test --ui
 ```
 
-For more information, you can visit the official Playwright documentation at:
-https://playwright.dev/docs/api/class-playwright
-
-And the official Playwright Git repository: https://github.com/microsoft/playwright
+## [Documentation](https://playwright.dev) | [Official Repo](https://github.com/microsoft/playwright) | [API reference](https://playwright.dev/docs/api/class-playwright)
